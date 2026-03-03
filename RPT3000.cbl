@@ -348,8 +348,20 @@
            *> WE WILL OUTPUT THAT CUSTOMER'S SALES TO THE OUTPUT        03040000
            *> NOTE: WE DON'T OUTPUT THE LAST LINE BECAUSE IT'S BLANK    03050000
            IF CUSTMAST-EOF-SWITCH = "N"                                 03060000
-                   PERFORM 220-PRINT-CUSTOMER-LINE.                     03070000
-                                                                        03080000
+               IF FIRST-RECORD-SWITCH = "Y"                             03070004
+                   PERFORM 220-PRINT-CUSTOMER-LINE                      03080004
+                   MOVE "N" TO FIRST-RECORD-SWITCH                      03081004
+                   MOVE CM-BRANCH-NUMBER TO OLD-BRANCH-NUMBER           03082004
+               ELSE                                                     03083004
+                   IF CM-BRANCH-NUMBER > OLD-BRANCH-NUMBER              03084004
+                       PERFORM 240-PRINT-BRANCH-LINE                    03085004
+                       PERFORM 220-PRINT-CUSTOMER-LINE                  03086004
+                       MOVE CM-BRANCH-NUMBER TO OLD-BRANCH-NUMBER       03087004
+                   ELSE                                                 03088004
+                       PERFORM 220-PRINT-CUSTOMER-LINE.                 03089004
+               ELSE                                                     03089104
+                   PERFORM 360-PRINT-BRANCH-LINE.                       03089204
+                                                                        03089304
       **************************************************************    03090000
       * READS A LINE OF THE INPUT FILE AND IF ITS THE LAST ONE     *    03100000
       * UPDATES THE CUSTOMER-EOF-SWITCH (END-OF-FILE)              *    03110000
@@ -437,6 +449,15 @@
            *> OF A NEW PAGE                                             03930000
            MOVE ZERO TO LINE-COUNT.                                     03940000
                                                                         03950000
+      **************************************************************    03951004
+      *                                                            *    03952004
+      *                                                            *    03953004
+      *                                                            *    03954004
+      **************************************************************    03955004
+       240-PRINT-BRANCH-LINE.                                           03956004
+                                                                        03957004
+                                                                        03958004
+                                                                        03959004
       **************************************************************    03960000
       * PRINTS THE GRAND TOTALS FOR ALL THE CUSTOMERS, RAN ONCE    *    03970000
       * AT THE VERY END OF THE PROGRAM WHEN ALL CUSTOMERS HAVE     *    03980000
