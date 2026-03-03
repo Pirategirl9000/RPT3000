@@ -60,7 +60,14 @@
       **************************************************************    00600000
        01  SWITCHES.                                                    00610000
            05  CUSTMAST-EOF-SWITCH     PIC X    VALUE "N".              00620000
-                                                                        00630000
+           05  FIRST-RECORD-SWITCH     PIC X    VALUE "Y".              00630001
+                                                                        00631001
+      **************************************************************    00632001
+      * SWITCH FOR END OF FILE                                     *    00633001
+      **************************************************************    00634001
+       01  CONTROL-FIELDS.                                              00635001
+           05  OLD-BRANCH-NUMBER       PIC 99.                          00636001
+                                                                        00638001
       **************************************************************    00640000
       * STORES INFORMATION RELEVANT TO THE PAGE                    *    00650000
       **************************************************************    00660000
@@ -73,6 +80,8 @@
       * STORES TOTAL FIELDS FOR CALCULATING                        *    00730000
       **************************************************************    00740000
        01  TOTAL-FIELDS.                                                00750000
+           05  BRANCH-TOTAL-THIS-YTD  PIC S9(6)V99   VALUE ZERO.        00751001
+           05  BRANCH-TOTAL-LAST-YTD  PIC S9(6)V99   VALUE ZERO.        00752001
            05  GRAND-TOTAL-THIS-YTD   PIC S9(7)V99   VALUE ZERO.        00760000
            05  GRAND-TOTAL-LAST-YTD   PIC S9(7)V99   VALUE ZERO.        00770000
                                                                         00780000
@@ -145,13 +154,13 @@
       * THE NEXT HEADER LINE                                       *    01450000
       **************************************************************    01460000
        01  HEADING-LINE-4.                                              01470000
-           05  FILLER      PIC X(7)   VALUE "BRANCH ".                  01480000
-           05  FILLER      PIC X(6)   VALUE "SALES ".                   01490000
+           05  FILLER      PIC X(8)    VALUE "BRANCH  ".                01480001
+           05  FILLER      PIC X(6)    VALUE "SALES ".                  01490001
            05  FILLER      PIC X(20)   VALUE "CUST                ".    01500000
            05  FILLER      PIC X(20)   VALUE "            SALES   ".    01510000
            05  FILLER      PIC X(20)   VALUE "      SALES         ".    01520000
            05  FILLER      PIC X(20)   VALUE "CHANGE     CHANGE   ".    01530000
-           05  FILLER      PIC X(37)   VALUE SPACE.                     01540000
+           05  FILLER      PIC X(36)   VALUE SPACE.                     01540001
                                                                         01550000
       **************************************************************    01560000
       * STORES THE FIFTH HEADER LINE INFORMATION                   *    01570000
@@ -229,6 +238,24 @@
            05  FILLER              PIC X(3)     VALUE SPACES.           02290000
            05  FILLER              PIC X(6)     VALUE ALL '='.          02300000
            05  FILLER              PIC X(40)    VALUE SPACES.           02310000
+                                                                        02310101
+      **************************************************************    02311001
+      *                                                            *    02312001
+      *                                                            *    02313001
+      *                                                            *    02314001
+      *                                                            *    02315001
+      **************************************************************    02316001
+       01  BRANCH-TOTAL-LINE.                                           02317001
+           05  FILLER              PIC X(23)    VALUE SPACE.            02318001
+           05  FILLER              PIC X(14)    VALUE "BRANCH TOTAL".   02318101
+           05  BTL-SALES-THIS-YTD  PIC ZZZ,ZZ9.99-.                     02319001
+           05  FILLER              PIC X(3)     VALUE SPACE.            02319101
+           05  BTL-SALES-LAST-YTD  PIC ZZZ,ZZ9.99-.                     02319201
+           05  FILLER              PIC X(3)     VALUE SPACE.            02319301
+           05  BTL-CHANGE-AMOUNT   PIC ZZZ,ZZ9.99-.                     02319401
+           05  FILLER              PIC X(3)     VALUE SPACE.            02319501
+           05  GTL-CHANGE-PERCENT  PIC ZZ9.9-.                          02319601
+           05  FILLER              PIC X(47)    VALUE SPACE.            02319701
       **************************************************************    02320000
       * STORES THE SECOND GRAND TOTAL LINE                         *    02330000
       * HOLDS THE TOTAL SALES FOR THIS AND LAST YEAR-TO-DATE,      *    02340000
@@ -236,7 +263,8 @@
       * AND THE PERCENTAGE DIFFERENCE - FOR OUTPUTTING             *    02360000
       **************************************************************    02370000
        01  GRAND-TOTAL-LINE2.                                           02380000
-           05  FILLER              PIC X(40)    VALUE SPACE.            02390000
+           05  FILLER              PIC X(23)    VALUE SPACE.            02390001
+           05  FILLER              PIC X(14)    VALUE "GRAND TOTAL".    02391001
            05  GTL-SALES-THIS-YTD  PIC Z,ZZZ,ZZ9.99-.                   02400000
            05  FILLER              PIC X(1)     VALUE SPACE.            02410000
            05  GTL-SALES-LAST-YTD  PIC Z,ZZZ,ZZ9.99-.                   02420000
@@ -244,7 +272,7 @@
            05  GTL-CHANGE-AMOUNT   PIC Z,ZZZ,ZZ9.99-.                   02440000
            05  FILLER              PIC X(3)     VALUE SPACE.            02450000
            05  GTL-CHANGE-PERCENT  PIC ZZ9.9-.                          02460000
-           05  FILLER              PIC X(40)    VALUE SPACE.            02470000
+           05  FILLER              PIC X(43)    VALUE SPACE.            02470001
                                                                         02480000
        PROCEDURE DIVISION.                                              02490000
                                                                         02500000
