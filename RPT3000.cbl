@@ -240,10 +240,10 @@
            05  FILLER              PIC X(40)    VALUE SPACES.           02310000
                                                                         02310101
       **************************************************************    02311001
-      *                                                            *    02312001
-      *                                                            *    02313001
-      *                                                            *    02314001
-      *                                                            *    02315001
+      * STORES THE BRANCH TOTAL LINE                               *    02312002
+      * HOLDS THE TOTALS FOR THIS AND LAST YEAR-TO-DATE IN SALES   *    02313002
+      * FOR THIS BRANCH AS WELL AS THE PERCENT DIFFERENCE          *    02314002
+      * USED FOR OUTPUTTING                                        *    02315002
       **************************************************************    02316001
        01  BRANCH-TOTAL-LINE.                                           02317001
            05  FILLER              PIC X(23)    VALUE SPACE.            02318001
@@ -256,7 +256,23 @@
            05  FILLER              PIC X(3)     VALUE SPACE.            02319501
            05  GTL-CHANGE-PERCENT  PIC ZZ9.9-.                          02319601
            05  FILLER              PIC X(47)    VALUE SPACE.            02319701
-      **************************************************************    02320000
+                                                                        02319803
+      **************************************************************    02319903
+      * STORES THE FIRST GRAND TOTAL LINE                          *    02320003
+      * DISPLAYS COLUMN DIVIDERS FOR THE GRAND TOTALS              *    02320103
+      **************************************************************    02320203
+       01  GRAND-TOTAL-LINE1.                                           02320303
+           05  FILLER              PIC X(40)    VALUE SPACE.            02320403
+           05  FILLER              PIC X(13)    VALUE ALL '='.          02320503
+           05  FILLER              PIC X        VALUE SPACE.            02320603
+           05  FILLER              PIC X(13)    VALUE ALL '='.          02320703
+           05  FILLER              PIC X        VALUE SPACE.            02320803
+           05  FILLER              PIC X(13)    VALUE ALL '='.          02320903
+           05  FILLER              PIC X(3)     VALUE SPACES.           02321003
+           05  FILLER              PIC X(6)     VALUE ALL '='.          02321103
+           05  FILLER              PIC X(40)    VALUE SPACES.           02321203
+                                                                        02321303
+      **************************************************************    02322000
       * STORES THE SECOND GRAND TOTAL LINE                         *    02330000
       * HOLDS THE TOTAL SALES FOR THIS AND LAST YEAR-TO-DATE,      *    02340000
       * THE TOTAL DIFFERENCE IN SALES MADE BETWEEN THE TWO YEARS   *    02350000
