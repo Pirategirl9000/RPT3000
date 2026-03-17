@@ -1,5 +1,5 @@
 # RPT2000
-![Image of Output](assets/RP3000Output.png)
+![Image of Output](assets/RPT3000Output.png)
 ## Author
 * [Violet French](https://github.com/Pirategirl9000)
 
