@@ -343,7 +343,7 @@
                        PERFORM 220-PRINT-CUSTOMER-LINE                  03430004
                        MOVE CM-BRANCH-NUMBER TO OLD-BRANCH-NUMBER       03440004
                    ELSE                                                 03450004
-                       PERFORM 220-PRINT-CUSTOMER-LINE.                 03460004
+                       PERFORM 220-PRINT-CUSTOMER-LINE                  03460009
            ELSE                                                         03470007
                PERFORM 240-PRINT-BRANCH-LINE.                           03480007
                                                                         03490004
@@ -382,147 +382,147 @@
                                                                         03820005
            *> MOVE THE DATA PULLED FROM THE INPUT FILE INTO THE         03830000
            *> CUSTOMER LINE RECORD FOR LATER OUTPUT                     03840000
-           MOVE CM-CUSTOMER-NUMBER  TO CL-CUSTOMER-NUMBER.              03870000
-           MOVE CM-CUSTOMER-NAME    TO CL-CUSTOMER-NAME.                03880000
-           MOVE CM-SALES-THIS-YTD   TO CL-SALES-THIS-YTD.               03890000
-           MOVE CM-SALES-LAST-YTD   TO CL-SALES-LAST-YTD.               03900000
-                                                                        03910000
-           *> CALCULATE THE DIFFERENCE BETWEEN THIS YEAR'S SALES AND    03920000
-           *> AND LAST THEN SAVE THESE RESULT TO CHANGE-AMOUNT AND      03930000
-           COMPUTE CHANGE-AMOUNT =                                      03940000
-               CM-SALES-THIS-YTD - CM-SALES-LAST-YTD.                   03950000
-           MOVE CHANGE-AMOUNT TO CL-CHANGE-AMOUNT.                      03960000
-                                                                        03970000
-           *> CALCULATE THE PERCENT FOR THE CHANGE IN SALES BETWEEN     03980000
-           *> THIS AND LAST YTD, IF THERE WAS NO LAST YEAR SALES        03990000
-           *> NUMBER WE MOVE 999.9 TO THE PERECENTAGE SINCE IT'S        04000000
-           *> A DIVIDE BY ZERO ERROR OTHERWISE                          04010000
-           IF CM-SALES-LAST-YTD = ZERO                                  04020000
-               MOVE 999.9 TO CL-CHANGE-PERCENT                          04030000
-           ELSE                                                         04040000
-               COMPUTE CL-CHANGE-PERCENT ROUNDED =                      04050000
-                   CHANGE-AMOUNT * 100 / CM-SALES-LAST-YTD              04060000
-                   ON SIZE ERROR                                        04070000
-                       MOVE 999.9 TO CL-CHANGE-PERCENT.                 04080000
-                                                                        04090000
-           *> PRINT THIS CUSTOMERS INFORMATION TO THE OUTPUT FILE       04100000
-           MOVE CUSTOMER-LINE TO PRINT-AREA.                            04110000
-           PERFORM 225-WRITE-REPORT-LINE.                               04120008
-                                                                        04140005
-           *> ADD THIS CUSTOMERS SALES TO THE BRANCH TOTALS             04150005
-           ADD CM-SALES-THIS-YTD TO BRANCH-TOTAL-THIS-YTD.              04160005
-           ADD CM-SALES-LAST-YTD TO BRANCH-TOTAL-THIS-YTD,              04170005
-                                                                        04180000
-           *> ADD THIS CUSTOMERS SALES TO THE GRAND TOTALS              04190000
-           ADD CM-SALES-THIS-YTD TO GRAND-TOTAL-THIS-YTD.               04200000
-           ADD CM-SALES-LAST-YTD TO GRAND-TOTAL-LAST-YTD.               04210000
-                                                                        04220000
-      **************************************************************    04220108
-      * PRINT ALL THE HEADER LINES TO THE OUTPUT FILE, RAN ONCE    *    04220208
-      * FOR EVERY PAGE                                             *    04220308
-      **************************************************************    04220408
-      225-WRITE-REPORT-LINE.                                            04221008
-          WRITE PRINT-AREA.                                             04222008
-          ADD 1 TO LINE-COUNT.                                          04223008
-                                                                        04224008
-      **************************************************************    04230000
-      * PRINT ALL THE HEADER LINES TO THE OUTPUT FILE, RAN ONCE    *    04240000
-      * FOR EVERY PAGE                                             *    04250000
-      **************************************************************    04260000
-       230-PRINT-HEADING-LINES.                                         04270000
-                                                                        04280000
-           *> HEADERS ARE PLACED AT THE START OF EVERY PAGE             04290000
-           *> SO WE INCREASE THE PAGE COUNT HERE                        04300000
-           ADD 1 TO PAGE-COUNT.                                         04310000
-           MOVE PAGE-COUNT     TO HL1-PAGE-NUMBER.                      04320000
+           MOVE CM-CUSTOMER-NUMBER  TO CL-CUSTOMER-NUMBER.              03850000
+           MOVE CM-CUSTOMER-NAME    TO CL-CUSTOMER-NAME.                03860000
+           MOVE CM-SALES-THIS-YTD   TO CL-SALES-THIS-YTD.               03870000
+           MOVE CM-SALES-LAST-YTD   TO CL-SALES-LAST-YTD.               03880000
+                                                                        03890000
+           *> CALCULATE THE DIFFERENCE BETWEEN THIS YEAR'S SALES AND    03900000
+           *> AND LAST THEN SAVE THESE RESULT TO CHANGE-AMOUNT AND      03910000
+           COMPUTE CHANGE-AMOUNT =                                      03920000
+               CM-SALES-THIS-YTD - CM-SALES-LAST-YTD.                   03930000
+           MOVE CHANGE-AMOUNT TO CL-CHANGE-AMOUNT.                      03940000
+                                                                        03950000
+           *> CALCULATE THE PERCENT FOR THE CHANGE IN SALES BETWEEN     03960000
+           *> THIS AND LAST YTD, IF THERE WAS NO LAST YEAR SALES        03970000
+           *> NUMBER WE MOVE 999.9 TO THE PERECENTAGE SINCE IT'S        03980000
+           *> A DIVIDE BY ZERO ERROR OTHERWISE                          03990000
+           IF CM-SALES-LAST-YTD = ZERO                                  04000000
+               MOVE 999.9 TO CL-CHANGE-PERCENT                          04010000
+           ELSE                                                         04020000
+               COMPUTE CL-CHANGE-PERCENT ROUNDED =                      04030000
+                   CHANGE-AMOUNT * 100 / CM-SALES-LAST-YTD              04040000
+                   ON SIZE ERROR                                        04050000
+                       MOVE 999.9 TO CL-CHANGE-PERCENT.                 04060000
+                                                                        04070000
+           *> PRINT THIS CUSTOMERS INFORMATION TO THE OUTPUT FILE       04080000
+           MOVE CUSTOMER-LINE TO PRINT-AREA.                            04090000
+           PERFORM 225-WRITE-REPORT-LINE.                               04100008
+                                                                        04110005
+           *> ADD THIS CUSTOMERS SALES TO THE BRANCH TOTALS             04120005
+           ADD CM-SALES-THIS-YTD TO BRANCH-TOTAL-THIS-YTD.              04130005
+           ADD CM-SALES-LAST-YTD TO BRANCH-TOTAL-THIS-YTD,              04140005
+                                                                        04150000
+           *> ADD THIS CUSTOMERS SALES TO THE GRAND TOTALS              04160000
+           ADD CM-SALES-THIS-YTD TO GRAND-TOTAL-THIS-YTD.               04170000
+           ADD CM-SALES-LAST-YTD TO GRAND-TOTAL-LAST-YTD.               04180000
+                                                                        04190000
+      **************************************************************    04200008
+      * PRINT ALL THE HEADER LINES TO THE OUTPUT FILE, RAN ONCE    *    04210008
+      * FOR EVERY PAGE                                             *    04220008
+      **************************************************************    04230008
+       225-WRITE-REPORT-LINE.                                           04240009
+           WRITE PRINT-AREA.                                            04250009
+           ADD 1 TO LINE-COUNT.                                         04260009
+                                                                        04270008
+      **************************************************************    04280000
+      * PRINT ALL THE HEADER LINES TO THE OUTPUT FILE, RAN ONCE    *    04290000
+      * FOR EVERY PAGE                                             *    04300000
+      **************************************************************    04310000
+       230-PRINT-HEADING-LINES.                                         04320000
                                                                         04330000
-           *> PRINT EACH HEADER LINE TO THE OUTPUT FILE                 04340000
-           MOVE HEADING-LINE-1 TO PRINT-AREA.                           04350000
-           WRITE PRINT-AREA.                                            04360000
-           MOVE HEADING-LINE-2 TO PRINT-AREA.                           04370000
-           WRITE PRINT-AREA.                                            04380000
-           MOVE HEADING-LINE-3 TO PRINT-AREA.                           04390000
-           WRITE PRINT-AREA.                                            04400000
-           MOVE HEADING-LINE-4 TO PRINT-AREA.                           04410000
-           WRITE PRINT-AREA.                                            04420000
-           MOVE HEADING-LINE-5 TO PRINT-AREA.                           04430000
-           WRITE PRINT-AREA.                                            04440000
-           MOVE HEADING-LINE-6 TO PRINT-AREA.                           04450000
-           WRITE PRINT-AREA.                                            04460000
-                                                                        04470000
-           *> RESET THE LINE COUNTER SINCE EVERY HEADER IS THE START    04480000
-           *> OF A NEW PAGE                                             04490000
-           MOVE ZERO TO LINE-COUNT.                                     04500000
-                                                                        04510000
-      **************************************************************    04520004
-      * PRINTS THE CURRENT BRANCH LINE TOTALS, RAN ONCE FOR EVERY  *    04530008
-      * BRANCH. ALSO CALCULATES THE CHANGE IN THE BRANCH           *    04540008
-      **************************************************************    04560004
-       240-PRINT-BRANCH-LINE.                                           04570004
-                                                                        04571008
-           *> MOVE THE BRANCH TOTALS TO THE BRANCH TOTAL LINE           04572008
-           MOVE BRANCH-TOTAL-THIS-YTD TO BTL-SALES-THIS-YTD.            04580008
-           MOVE BRANCH-TOTAL-LAST-YTD TO BTL-SALES-LAST-YTD.            04590008
-                                                                        04600004
-           *> CALCULATE THE CHANGE BETWEEN THIS-YTD AND LAST            04600108
-           *> FOR THE CURRENT BRANCH AND ADD IT TO THE TOTAL LINE       04600208
-           COMPUTE CHANGE-AMOUNT =                                      04601008
-               BRANCH-TOTAL-THIS-YTD - BRANCH-TOTAL-LAST-YTD.           04602008
-           MOVE CHANGE-AMOUNT TO BTL-CHANGE-AMOUNT.                     04603008
-                                                                        04604008
-           *> CALCULATE THE CHANGE PERCENT BETWEEN YTD'S                04604108
-           *> THEN MOVE TO THE BRANCH TOTAL LINE                        04604208
-           IF BRANCH-TOTAL-LAST-YTD = ZERO                              04605008
-               MOVE 999.9 TO BTL-CHANGE-AMOUNT                          04606008
-           ELSE                                                         04607008
-               COMPUTE BTL-CHANGE-PERCENT ROUNDED =                     04608008
-                   CHANGE-AMOUNT * 100 / BRANCH-TOTAL-LAST-YTD          04609008
-                   ON SIZE ERROR                                        04609108
-                       MOVE 999.9 TO BTL-CHANGE PERCENT                 04609208
-                                                                        04609308
-           *> PRINT BRANCH LINE                                         04609408
-           MOVE BRANCH-TOTAL-LINE TO PRINT-AREA.                        04609508
-           PERFORM 225-WRITE-REPORT-LINE.                               04609608
-                                                                        04609708
-           *> ADD THE BRANCH TOTALS TO THE GRAND TOTALS                 04609808
-           ADD BRANCH-TOTAL-THIS-YTD TO GRAND-TOTAL-THIS-YTD.           04609908
-           ADD BRANCH-TOTAL-LAST-YTD TO GRAND-TOTAL-LAST-YTD.           04610008
-                                                                        04610108
-           *> ZERO OUT THE BRANCH TOTALS                                04610208
-           MOVE ZERO TO BRANCH-TOTAL-THIS-YTD.                          04610308
-           MOVE ZERO TO BRANCH-TOTAL-LAST-YTD.                          04610408
-                                                                        04610508
-      **************************************************************    04611000
-      * PRINTS THE GRAND TOTALS FOR ALL THE CUSTOMERS, RAN ONCE    *    04620000
-      * AT THE VERY END OF THE PROGRAM WHEN ALL CUSTOMERS HAVE     *    04630000
-      * BEEN PRINTED                                               *    04640000
-      **************************************************************    04650000
-       300-PRINT-GRAND-TOTALS.                                          04660000
-                                                                        04670000
-           *> MOVE THE GRAND TOTALS FOR THE SALES TO THE                04680000
-           *> OUTPUT LINE FOR GRAND TOTALS                              04690000
-           MOVE GRAND-TOTAL-THIS-YTD TO GTL-SALES-THIS-YTD.             04700000
-           MOVE GRAND-TOTAL-LAST-YTD TO GTL-SALES-LAST-YTD.             04710000
-                                                                        04720000
-           *> COMPUTE THE GRAND TOTAL FOR THE CHANGE AMOUNT             04730000
-           COMPUTE CHANGE-AMOUNT =                                      04740000
-               GRAND-TOTAL-THIS-YTD - GRAND-TOTAL-LAST-YTD.             04750000
-           MOVE CHANGE-AMOUNT TO GTL-CHANGE-AMOUNT.                     04760000
-                                                                        04770000
-           *> CALCULATE THE TOTAL CHANGE IN PERCENT BETWEEN             04780000
-           *> THIS YTD AND LAST YTD FOR ALL CUSTOMERS                   04790000
-           *> IF THERE WAS NO LAST YEAR FOR ANYONE DEFAULT TO           04800000
-           *> A PERCENT OF 999.9 TO AVOID DIVIDE BY ZERO ERROR          04810000
-           IF GRAND-TOTAL-LAST-YTD = ZERO                               04820000
-               MOVE 999.9 TO GTL-CHANGE-PERCENT                         04830000
-           ELSE                                                         04840000
-               COMPUTE GTL-CHANGE-PERCENT ROUNDED =                     04850000
-                   CHANGE-AMOUNT * 100 / GRAND-TOTAL-LAST-YTD           04860000
-                   ON SIZE ERROR                                        04870000
-                       MOVE 999.9 TO GTL-CHANGE-PERCENT.                04880000
-                                                                        04890000
-           *> PRINT THE GRAND-TOTAL TO THE OUTPUT FILE                  04900000
-           MOVE GRAND-TOTAL-LINE1    TO PRINT-AREA.                     04910000
-           PERFORM 225-WRITE-REPORT-LINE.                               04920008
-           MOVE GRAND-TOTAL-LINE2    TO PRINT-AREA.                     04930000
-           PERFORM 225-WRITE-REPORT-LINE.                               04940008
+           *> HEADERS ARE PLACED AT THE START OF EVERY PAGE             04340000
+           *> SO WE INCREASE THE PAGE COUNT HERE                        04350000
+           ADD 1 TO PAGE-COUNT.                                         04360000
+           MOVE PAGE-COUNT     TO HL1-PAGE-NUMBER.                      04370000
+                                                                        04380000
+           *> PRINT EACH HEADER LINE TO THE OUTPUT FILE                 04390000
+           MOVE HEADING-LINE-1 TO PRINT-AREA.                           04400000
+           WRITE PRINT-AREA.                                            04410000
+           MOVE HEADING-LINE-2 TO PRINT-AREA.                           04420000
+           WRITE PRINT-AREA.                                            04430000
+           MOVE HEADING-LINE-3 TO PRINT-AREA.                           04440000
+           WRITE PRINT-AREA.                                            04450000
+           MOVE HEADING-LINE-4 TO PRINT-AREA.                           04460000
+           WRITE PRINT-AREA.                                            04470000
+           MOVE HEADING-LINE-5 TO PRINT-AREA.                           04480000
+           WRITE PRINT-AREA.                                            04490000
+           MOVE HEADING-LINE-6 TO PRINT-AREA.                           04500000
+           WRITE PRINT-AREA.                                            04510000
+                                                                        04520000
+           *> RESET THE LINE COUNTER SINCE EVERY HEADER IS THE START    04530000
+           *> OF A NEW PAGE                                             04540000
+           MOVE ZERO TO LINE-COUNT.                                     04550000
+                                                                        04560000
+      **************************************************************    04570004
+      * PRINTS THE CURRENT BRANCH LINE TOTALS, RAN ONCE FOR EVERY  *    04580008
+      * BRANCH. ALSO CALCULATES THE CHANGE IN THE BRANCH           *    04590008
+      **************************************************************    04600004
+       240-PRINT-BRANCH-LINE.                                           04610004
+                                                                        04620008
+           *> MOVE THE BRANCH TOTALS TO THE BRANCH TOTAL LINE           04630008
+           MOVE BRANCH-TOTAL-THIS-YTD TO BTL-SALES-THIS-YTD.            04640008
+           MOVE BRANCH-TOTAL-LAST-YTD TO BTL-SALES-LAST-YTD.            04650008
+                                                                        04660004
+           *> CALCULATE THE CHANGE BETWEEN THIS-YTD AND LAST            04670008
+           *> FOR THE CURRENT BRANCH AND ADD IT TO THE TOTAL LINE       04680008
+           COMPUTE CHANGE-AMOUNT =                                      04690008
+               BRANCH-TOTAL-THIS-YTD - BRANCH-TOTAL-LAST-YTD.           04700008
+           MOVE CHANGE-AMOUNT TO BTL-CHANGE-AMOUNT.                     04710008
+                                                                        04720008
+           *> CALCULATE THE CHANGE PERCENT BETWEEN YTD'S                04730008
+           *> THEN MOVE TO THE BRANCH TOTAL LINE                        04740008
+           IF BRANCH-TOTAL-LAST-YTD = ZERO                              04750008
+               MOVE 999.9 TO BTL-CHANGE-AMOUNT                          04760008
+           ELSE                                                         04770008
+               COMPUTE BTL-CHANGE-PERCENT ROUNDED =                     04780008
+                   CHANGE-AMOUNT * 100 / BRANCH-TOTAL-LAST-YTD          04790008
+                   ON SIZE ERROR                                        04800008
+                       MOVE 999.9 TO BTL-CHANGE-PERCENT                 04810009
+                                                                        04820008
+           *> PRINT BRANCH LINE                                         04830008
+           MOVE BRANCH-TOTAL-LINE TO PRINT-AREA.                        04840008
+           PERFORM 225-WRITE-REPORT-LINE.                               04850008
+                                                                        04860008
+           *> ADD THE BRANCH TOTALS TO THE GRAND TOTALS                 04870008
+           ADD BRANCH-TOTAL-THIS-YTD TO GRAND-TOTAL-THIS-YTD.           04880008
+           ADD BRANCH-TOTAL-LAST-YTD TO GRAND-TOTAL-LAST-YTD.           04890008
+                                                                        04900008
+           *> ZERO OUT THE BRANCH TOTALS                                04910008
+           MOVE ZERO TO BRANCH-TOTAL-THIS-YTD.                          04920008
+           MOVE ZERO TO BRANCH-TOTAL-LAST-YTD.                          04930008
+                                                                        04940008
+      **************************************************************    04950000
+      * PRINTS THE GRAND TOTALS FOR ALL THE CUSTOMERS, RAN ONCE    *    04960000
+      * AT THE VERY END OF THE PROGRAM WHEN ALL CUSTOMERS HAVE     *    04970000
+      * BEEN PRINTED                                               *    04980000
+      **************************************************************    04990000
+       300-PRINT-GRAND-TOTALS.                                          05000000
+                                                                        05010000
+           *> MOVE THE GRAND TOTALS FOR THE SALES TO THE                05020000
+           *> OUTPUT LINE FOR GRAND TOTALS                              05030000
+           MOVE GRAND-TOTAL-THIS-YTD TO GTL-SALES-THIS-YTD.             05040000
+           MOVE GRAND-TOTAL-LAST-YTD TO GTL-SALES-LAST-YTD.             05050000
+                                                                        05060000
+           *> COMPUTE THE GRAND TOTAL FOR THE CHANGE AMOUNT             05070000
+           COMPUTE CHANGE-AMOUNT =                                      05080000
+               GRAND-TOTAL-THIS-YTD - GRAND-TOTAL-LAST-YTD.             05090000
+           MOVE CHANGE-AMOUNT TO GTL-CHANGE-AMOUNT.                     05100000
+                                                                        05110000
+           *> CALCULATE THE TOTAL CHANGE IN PERCENT BETWEEN             05120000
+           *> THIS YTD AND LAST YTD FOR ALL CUSTOMERS                   05130000
+           *> IF THERE WAS NO LAST YEAR FOR ANYONE DEFAULT TO           05140000
+           *> A PERCENT OF 999.9 TO AVOID DIVIDE BY ZERO ERROR          05150000
+           IF GRAND-TOTAL-LAST-YTD = ZERO                               05160000
+               MOVE 999.9 TO GTL-CHANGE-PERCENT                         05170000
+           ELSE                                                         05180000
+               COMPUTE GTL-CHANGE-PERCENT ROUNDED =                     05190000
+                   CHANGE-AMOUNT * 100 / GRAND-TOTAL-LAST-YTD           05200000
+                   ON SIZE ERROR                                        05210000
+                       MOVE 999.9 TO GTL-CHANGE-PERCENT.                05220000
+                                                                        05230000
+           *> PRINT THE GRAND-TOTAL TO THE OUTPUT FILE                  05240000
+           MOVE GRAND-TOTAL-LINE1    TO PRINT-AREA.                     05250000
+           PERFORM 225-WRITE-REPORT-LINE.                               05260008
+           MOVE GRAND-TOTAL-LINE2    TO PRINT-AREA.                     05270000
+           PERFORM 225-WRITE-REPORT-LINE.                               05280008
