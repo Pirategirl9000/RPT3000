@@ -259,7 +259,7 @@
       **************************************************************    02650000
        01  GRAND-TOTAL-LINE2.                                           02660000
            05  FILLER              PIC X(23)    VALUE SPACE.            02670001
-           05  FILLER              PIC X(12)    VALUE "GRAND TOTAL".    02680014
+           05  FILLER              PIC X(11)    VALUE "GRAND TOTAL".    02680017
            05  GTL-SALES-THIS-YTD  PIC Z,ZZZ,ZZ9.99-.                   02690000
            05  FILLER              PIC X(1)     VALUE SPACE.            02700000
            05  GTL-SALES-LAST-YTD  PIC Z,ZZZ,ZZ9.99-.                   02710000
@@ -405,12 +405,8 @@
                                                                         04110005
            *> ADD THIS CUSTOMERS SALES TO THE BRANCH TOTALS             04120005
            ADD CM-SALES-THIS-YTD TO BRANCH-TOTAL-THIS-YTD.              04130005
-           ADD CM-SALES-LAST-YTD TO BRANCH-TOTAL-THIS-YTD,              04140005
+           ADD CM-SALES-LAST-YTD TO BRANCH-TOTAL-LAST-YTD.              04140017
                                                                         04150000
-           *> ADD THIS CUSTOMERS SALES TO THE GRAND TOTALS              04160000
-           ADD CM-SALES-THIS-YTD TO GRAND-TOTAL-THIS-YTD.               04170000
-           ADD CM-SALES-LAST-YTD TO GRAND-TOTAL-LAST-YTD.               04180000
-                                                                        04190000
       **************************************************************    04200008
       * PRINT ALL THE HEADER LINES TO THE OUTPUT FILE, RAN ONCE    *    04210008
       * FOR EVERY PAGE                                             *    04220008
@@ -467,7 +463,7 @@
            *> CALCULATE THE CHANGE PERCENT BETWEEN YTD'S                04730008
            *> THEN MOVE TO THE BRANCH TOTAL LINE                        04740008
            IF BRANCH-TOTAL-LAST-YTD = ZERO                              04750008
-               MOVE 999.9 TO BTL-CHANGE-AMOUNT                          04760008
+               MOVE 999.9 TO BTL-CHANGE-PERCENT                         04760015
            ELSE                                                         04770008
                COMPUTE BTL-CHANGE-PERCENT ROUNDED =                     04780008
                    CHANGE-AMOUNT * 100 / BRANCH-TOTAL-LAST-YTD          04790008
@@ -477,6 +473,10 @@
            *> PRINT BRANCH LINE                                         04830008
            MOVE BRANCH-TOTAL-LINE TO PRINT-AREA.                        04840008
            PERFORM 225-WRITE-REPORT-LINE.                               04850008
+                                                                        04850116
+           *> WRITE A BLANK SPACER LINE                                 04850216
+           MOVE SPACES TO PRINT-AREA.                                   04851016
+           PERFORM 225-WRITE-REPORT-LINE.                               04852016
                                                                         04860008
            *> ADD THE BRANCH TOTALS TO THE GRAND TOTALS                 04870008
            ADD BRANCH-TOTAL-THIS-YTD TO GRAND-TOTAL-THIS-YTD.           04880008
