@@ -229,7 +229,7 @@
       * THE TOTAL DIFFERENCE IN SALES MADE BETWEEN THE TWO YEARS   *    02630000
       * AND THE PERCENTAGE DIFFERENCE - FOR OUTPUTTING             *    02640000
       **************************************************************    02650000
-       01  GRAND-TOTAL-LINE2.                                           02660000
+       01  GRAND-TOTAL-LINE.                                            02660027
            05  FILLER              PIC X(23)    VALUE SPACE.            02670001
            05  FILLER              PIC X(12)    VALUE "GRAND TOTAL ".   02680025
            05  GTL-SALES-THIS-YTD  PIC Z,ZZZ,ZZ9.99-.                   02690000
@@ -488,5 +488,5 @@
                        MOVE 999.9 TO GTL-CHANGE-PERCENT.                05220000
                                                                         05230000
            *> PRINT THE GRAND-TOTAL TO THE OUTPUT FILE                  05240000
-           MOVE GRAND-TOTAL-LINE2    TO PRINT-AREA.                     05270000
+           MOVE GRAND-TOTAL-LINE TO PRINT-AREA.                         05270027
            PERFORM 225-WRITE-REPORT-LINE.                               05280008
