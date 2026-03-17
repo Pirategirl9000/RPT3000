@@ -382,8 +382,6 @@
                                                                         03820005
            *> MOVE THE DATA PULLED FROM THE INPUT FILE INTO THE         03830000
            *> CUSTOMER LINE RECORD FOR LATER OUTPUT                     03840000
-           MOVE CM-BRANCH-NUMBER    TO CL-BRANCH-NUMBER.                03850000
-           MOVE CM-SALESREP-NUMBER  TO CL-SALESREP-NUMBER.              03860000
            MOVE CM-CUSTOMER-NUMBER  TO CL-CUSTOMER-NUMBER.              03870000
            MOVE CM-CUSTOMER-NAME    TO CL-CUSTOMER-NAME.                03880000
            MOVE CM-SALES-THIS-YTD   TO CL-SALES-THIS-YTD.               03890000
@@ -409,8 +407,7 @@
                                                                         04090000
            *> PRINT THIS CUSTOMERS INFORMATION TO THE OUTPUT FILE       04100000
            MOVE CUSTOMER-LINE TO PRINT-AREA.                            04110000
-           WRITE PRINT-AREA.                                            04120000
-           ADD 1 TO LINE-COUNT.                                         04130000
+           PERFORM 225-WRITE-REPORT-LINE.                               04120008
                                                                         04140005
            *> ADD THIS CUSTOMERS SALES TO THE BRANCH TOTALS             04150005
            ADD CM-SALES-THIS-YTD TO BRANCH-TOTAL-THIS-YTD.              04160005
@@ -420,6 +417,14 @@
            ADD CM-SALES-THIS-YTD TO GRAND-TOTAL-THIS-YTD.               04200000
            ADD CM-SALES-LAST-YTD TO GRAND-TOTAL-LAST-YTD.               04210000
                                                                         04220000
+      **************************************************************    04220108
+      * PRINT ALL THE HEADER LINES TO THE OUTPUT FILE, RAN ONCE    *    04220208
+      * FOR EVERY PAGE                                             *    04220308
+      **************************************************************    04220408
+      225-WRITE-REPORT-LINE.                                            04221008
+          WRITE PRINT-AREA.                                             04222008
+          ADD 1 TO LINE-COUNT.                                          04223008
+                                                                        04224008
       **************************************************************    04230000
       * PRINT ALL THE HEADER LINES TO THE OUTPUT FILE, RAN ONCE    *    04240000
       * FOR EVERY PAGE                                             *    04250000
@@ -450,15 +455,44 @@
            MOVE ZERO TO LINE-COUNT.                                     04500000
                                                                         04510000
       **************************************************************    04520004
-      *                                                            *    04530004
-      *                                                            *    04540004
-      *                                                            *    04550004
+      * PRINTS THE CURRENT BRANCH LINE TOTALS, RAN ONCE FOR EVERY  *    04530008
+      * BRANCH. ALSO CALCULATES THE CHANGE IN THE BRANCH           *    04540008
       **************************************************************    04560004
        240-PRINT-BRANCH-LINE.                                           04570004
-                                                                        04580004
-                                                                        04590004
+                                                                        04571008
+           *> MOVE THE BRANCH TOTALS TO THE BRANCH TOTAL LINE           04572008
+           MOVE BRANCH-TOTAL-THIS-YTD TO BTL-SALES-THIS-YTD.            04580008
+           MOVE BRANCH-TOTAL-LAST-YTD TO BTL-SALES-LAST-YTD.            04590008
                                                                         04600004
-      **************************************************************    04610000
+           *> CALCULATE THE CHANGE BETWEEN THIS-YTD AND LAST            04600108
+           *> FOR THE CURRENT BRANCH AND ADD IT TO THE TOTAL LINE       04600208
+           COMPUTE CHANGE-AMOUNT =                                      04601008
+               BRANCH-TOTAL-THIS-YTD - BRANCH-TOTAL-LAST-YTD.           04602008
+           MOVE CHANGE-AMOUNT TO BTL-CHANGE-AMOUNT.                     04603008
+                                                                        04604008
+           *> CALCULATE THE CHANGE PERCENT BETWEEN YTD'S                04604108
+           *> THEN MOVE TO THE BRANCH TOTAL LINE                        04604208
+           IF BRANCH-TOTAL-LAST-YTD = ZERO                              04605008
+               MOVE 999.9 TO BTL-CHANGE-AMOUNT                          04606008
+           ELSE                                                         04607008
+               COMPUTE BTL-CHANGE-PERCENT ROUNDED =                     04608008
+                   CHANGE-AMOUNT * 100 / BRANCH-TOTAL-LAST-YTD          04609008
+                   ON SIZE ERROR                                        04609108
+                       MOVE 999.9 TO BTL-CHANGE PERCENT                 04609208
+                                                                        04609308
+           *> PRINT BRANCH LINE                                         04609408
+           MOVE BRANCH-TOTAL-LINE TO PRINT-AREA.                        04609508
+           PERFORM 225-WRITE-REPORT-LINE.                               04609608
+                                                                        04609708
+           *> ADD THE BRANCH TOTALS TO THE GRAND TOTALS                 04609808
+           ADD BRANCH-TOTAL-THIS-YTD TO GRAND-TOTAL-THIS-YTD.           04609908
+           ADD BRANCH-TOTAL-LAST-YTD TO GRAND-TOTAL-LAST-YTD.           04610008
+                                                                        04610108
+           *> ZERO OUT THE BRANCH TOTALS                                04610208
+           MOVE ZERO TO BRANCH-TOTAL-THIS-YTD.                          04610308
+           MOVE ZERO TO BRANCH-TOTAL-LAST-YTD.                          04610408
+                                                                        04610508
+      **************************************************************    04611000
       * PRINTS THE GRAND TOTALS FOR ALL THE CUSTOMERS, RAN ONCE    *    04620000
       * AT THE VERY END OF THE PROGRAM WHEN ALL CUSTOMERS HAVE     *    04630000
       * BEEN PRINTED                                               *    04640000
@@ -489,6 +523,6 @@
                                                                         04890000
            *> PRINT THE GRAND-TOTAL TO THE OUTPUT FILE                  04900000
            MOVE GRAND-TOTAL-LINE1    TO PRINT-AREA.                     04910000
-           WRITE PRINT-AREA.                                            04920000
+           PERFORM 225-WRITE-REPORT-LINE.                               04920008
            MOVE GRAND-TOTAL-LINE2    TO PRINT-AREA.                     04930000
-           WRITE PRINT-AREA.                                            04940000
+           PERFORM 225-WRITE-REPORT-LINE.                               04940008
