@@ -14,11 +14,9 @@
 This program uses a dataset to produce a report based on customer sales reports. The resulting report will be stored to a new dataset. The report details the spendings for this year and last as well as the difference between the two for each customer. Also produces subtotals and grand-totals for the report
 
 ## New Concepts Used
-* File IO
-* Header line formatting
-* CURRENT-DATE-TIME function
-* Formatting for multiple pages
-* File descriptions
+* Calculating Subtotals
+* DRY
+* Output Reformatting
 
 ## Script Breakdown
 
@@ -36,20 +34,23 @@ This program uses a dataset to produce a report based on customer sales reports.
 * `CHANGE-AMOUNT` - Contains the difference in sales between last YTD and this YTD
 * `HEADING-LINE-1` THRU `HEADING-LINE-6` - Records 130 character long used for outputting header lines for each page
 * `CUSTOMER-LINE` - Record containing information about the current customer
+  * `CL-BRANCH-NUMBER` - The branch number for this customer, only printed once for each branch
   * `CL-CUSTOMER-NAME` - The name of this customer
   * `CL-SALES-THIS-YTD` - Sales this year-to-date
   * `CL-SALES-LAST-YTD` - Sales last year-to-date
   * `CL-CHANGE-AMOUNT` - The difference between this year and last year's sales
   * `CL-CHANGE-PERCENT` - The percent difference between this year and last year's sales
-* `GRAND-TOTAL-LINE-1` AND `GRAND-TOTAL-LINE-2` - Records used for outputting the grandtotals
-  * `GTL-SALES-THIS-YTD` - Total sales for this year-to-date
-  * `GTL-SALES-LAST-YTD` - Total sales last year-to-date
-  * `GTL-CHANGE-AMOUNT` - The total difference between last year's sales and this years
-  * `GTL-CHANGE-PERCENT` - The percentage difference between last year's sales and this years
+* `GRAND-TOTAL-LINE-` AND `BRANCH-TOTAL-LINE` - Record used for outputting the grandtotal and subtotal
+  * `SALES-THIS-YTD` - Total sales for this year-to-date
+  * `SALES-LAST-YTD` - Total sales last year-to-date
+  * `CHANGE-AMOUNT` - The total difference between last year's sales and this years
+  * `CHANGE-PERCENT` - The percentage difference between last year's sales and this years
  
-### Paragraphs
+### Notable Paragraphs
 * `000-PREPARE-SALES-REPORT`
   * Opens and closes the IO files and delgates the work for reading/writing them
+  * If branch number of current customer is greater than the branch number of the last customer calls for the printing of
+  a branch line 
 * `100-FORMAT-REPORT-HEADING`
   * Formats the header file by retrieving the date and moving it to the appropriate header lines
 * `200-PREPARE-SALES-LINES`
@@ -60,6 +61,8 @@ This program uses a dataset to produce a report based on customer sales reports.
   * If this line is on the next page, reprints the header lines, then performs calculations for determining the values for the customer line before outputting them with the other customer information gathered from the input file
 * `230-PRINT-HEADING-LINES`
   * Moves to the next page by resetting line count, incrementing page count, and reprinting header lines
+* `240-PRINT-BRANCH-LINE`
+  * Prints the current subtotals for this branch and adds them to the grand totals  
 * `300-PRINT-GRAND-TOTALS`
   * Calculates and prints the grand totals
  
