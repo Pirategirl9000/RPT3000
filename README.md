@@ -1,4 +1,4 @@
-# RPT2000
+# RPT3000
 ![Image of Output](assets/RPT3000Output.png)
 ## Author
 * [Violet French](https://github.com/Pirategirl9000)
