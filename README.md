@@ -15,7 +15,7 @@ This program uses a dataset to produce a report based on customer sales reports.
 
 ## New Concepts Used
 * Calculating Subtotals
-* DRY
+* DRY - Don't Repeat Yourself
 * Output Reformatting
 
 ## Script Breakdown
