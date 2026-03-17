@@ -6,7 +6,8 @@
       *   Date........: 2026.02.19                                      00060000
       *   Github URL..: https://github.com/Pirategirl9000/RPT3000       00070000
       *   Description.: This program produces a sales report based on   00080000
-      *   values acquired from the CUSTMAST dataset                     00090000
+      *   values acquired from the CUSTMAST dataset and produces        00090026
+      *   subtotals and grandtotals for the different branches          00091026
        ENVIRONMENT DIVISION.                                            00100000
                                                                         00110000
        INPUT-OUTPUT SECTION.                                            00120000
